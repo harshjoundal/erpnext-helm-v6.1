@@ -82,8 +82,8 @@ custom_apps:
   - frappe_external_solutions
   - india_compliance
   - exotel_integration
-  - helpdesk
-  - pw_help_desk
+  # - helpdesk
+  # - pw_help_desk
 worker:
   gunicorn:
     replicaCount: 2
@@ -360,7 +360,7 @@ jobs:
     tolerations: []
     affinity: {}
   migrate:
-    enabled: true
+    enabled: false
     siteName: "erp.cluster.local"
     skipFailing: false
     backoffLimit: 0
@@ -389,7 +389,9 @@ jobs:
     enabled: false
     siteName: "erp.cluster.local"
     backoffLimit: 0
-    apps: []
+    apps:
+      - pw_help_desk
+      - helpdesk
     forced: false
     resources: {}
     nodeSelector:
