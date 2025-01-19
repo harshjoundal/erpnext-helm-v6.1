@@ -1,0 +1,471 @@
+# Default values for erpnext.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+# Configure external database host
+# dbHost: "erpnext-stage.cejra4hw3o2e.ap-south-1.rds.amazonaws.com"
+# dbPort: 3306
+# dbRootUser: "admin"
+# dbRootPassword: "1WGlvm2ddB8iMOTpVtKn"
+dbRds: false
+dbName: "erpnext"
+elkKube:
+  enabled: true
+
+image:
+  repository:  harshjoundal7/helpdesk
+  tag: amd
+  pullPolicy: IfNotPresent
+
+nginx:
+  replicaCount: 2
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 3
+    targetCPU: 75
+    targetMemory: 75
+  # config: |
+  #   # custom conf /etc/nginx/conf.d/default.conf
+  environment:
+    upstreamRealIPAddress: "127.0.0.1"
+    upstreamRealIPRecursive: "off"
+    upstreamRealIPHeader: "X-Forwarded-For"
+    frappeSiteNameHeader: "$host"
+  livenessProbe:
+    tcpSocket:
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  readinessProbe:
+    tcpSocket:
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  service:
+    type: ClusterIP
+    port: 8080
+  resources: {}
+  nodeSelector: 
+      app: erpnext
+  tolerations: []
+  affinity: {}
+  envVars: []
+  initContainers: []
+  sidecars: []
+commonEnvVars: &commonEnvVars
+  - name: PP_BACKEND_BASE_URL
+    value: "http://penpencil-backend-service.microservices.svc"
+  - name: BATCH_MICROSERVICE_BASE_URL
+    value: "http://batches-service.microservices.svc"
+  - name: USER_MICROSERVICE_BASE_URL
+    value: "http://user-microservice.microservices.svc"
+  - name: AWS_REGION
+    value: "ap-south-1"
+  - name: AWS_BUCKET
+    value: "special-ops-erpnext-stage"
+  - name: CORE_UTILITIES_BASE_URL
+    value: "http://core-utilities-service.microservices.svc"
+  - name: PP_ADMIN_BASE_URL
+    value: https://stage-api.penpencil.co
+  - name: DARWINBOX_BASE_URL
+    value: "https://pwhr.darwinbox.in"
+  - name: DARWINBOX_API_KEY
+    value: "d8be0a826ecaac32023ed4446300ffe8488ea75ee1fdf7bc5cdbeca83c4de2892fa9b416a3a6bd2d3fef190be4f6c37b1cf409f17fff4a91d9be9ca0566c05fe"
+  - name: DARWINBOX_DATASET_KEY
+    value: "a5d19e53bb42f91d7f0027c33a18009221054812b06e3dbaa459a03fb9ce60673fb171f30aa28695e9b2cce201876be80e16c436a48c170c88cc10ea0066f3d0"
+  - name: DARWINBOX_USERNAME
+    value: "ERP"
+  - name: DARWINBOX_PASSWORD
+    value: "Erp@1234"
+custom_apps:
+  - special_ops_frappe_utilities
+  - frappe_external_solutions
+  - india_compliance
+  - exotel_integration
+  - helpdesk
+  - pw_help_desk
+worker:
+  gunicorn:
+    replicaCount: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPU: 75
+      targetMemory: 75
+    livenessProbe:
+      tcpSocket:
+        port: 8000
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    readinessProbe:
+      tcpSocket:
+        port: 8000
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    service:
+      type: ClusterIP
+      port: 8000
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    args: []
+    envVars: 
+      *commonEnvVars
+    initContainers: []
+    sidecars: []
+  default:
+    replicaCount: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPU: 75
+      targetMemory: 75
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    livenessProbe:
+      override: false
+      probe: {}
+    readinessProbe:
+      override: false
+      probe: {}
+    envVars: 
+      *commonEnvVars
+    initContainers: []
+    sidecars: []
+  short:
+    replicaCount: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPU: 75
+      targetMemory: 75
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    livenessProbe:
+      override: false
+      probe: {}
+    readinessProbe:
+      override: false
+      probe: {}
+    envVars: 
+      *commonEnvVars
+    initContainers: []
+    sidecars: []
+  long:
+    replicaCount: 2
+    autoscaling:
+      enabled: false
+      minReplicas: 2
+      maxReplicas: 3
+      targetCPU: 75
+      targetMemory: 75
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    livenessProbe:
+      override: false
+      probe: {}
+    readinessProbe:
+      override: false
+      probe: {}
+    envVars: 
+      *commonEnvVars
+    initContainers: []
+    sidecars: []
+  scheduler:
+    replicaCount: 2
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    livenessProbe:
+      override: false
+      probe: {}
+    readinessProbe:
+      override: false
+      probe: {}
+    envVars: 
+      *commonEnvVars
+    initContainers: []
+    sidecars: []
+  healthProbe: |
+    exec:
+      command:
+        - bash
+        - -c
+        - echo "Ping backing services";
+        {{- if .Values.mariadb.enabled }}
+        {{- if eq .Values.mariadb.architecture "replication" }}
+        - wait-for-it {{ .Release.Name }}-mariadb-primary:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- else }}
+        - wait-for-it {{ .Release.Name }}-mariadb:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- end }}
+        {{- else if .Values.dbHost }}
+        - wait-for-it {{ .Values.dbHost }}:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- end }}
+        {{- if index .Values "redis-cache" "host" }}
+        - wait-for-it {{ .Release.Name }}-redis-cache-master:{{ index .Values "redis-cache" "master" "containerPorts" "redis" }} -t 1;
+        {{- else if index .Values "redis-cache" "host" }}
+        - wait-for-it {{ index .Values "redis-cache" "host" }} -t 1;
+        {{- end }}
+        {{- if index .Values "redis-queue" "host" }}
+        - wait-for-it {{ .Release.Name }}-redis-queue-master:{{ index .Values "redis-queue" "master" "containerPorts" "redis" }} -t 1;
+        {{- else if index .Values "redis-queue" "host" }}
+        - wait-for-it {{ index .Values "redis-queue" "host" }} -t 1;
+        {{- end }}
+        {{- if .Values.postgresql.host }}
+        - wait-for-it {{ .Values.postgresql.host }}:{{ .Values.postgresql.primary.service.ports.postgresql }} -t 1;
+        {{- else if .Values.postgresql.enabled }}
+        - wait-for-it {{ .Release.Name }}-postgresql:{{ .Values.postgresql.primary.service.ports.postgresql }} -t 1;
+        {{- end }}
+    initialDelaySeconds: 15
+    periodSeconds: 5
+socketio:
+  replicaCount: 2
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPU: 75
+    targetMemory: 75
+  livenessProbe:
+    tcpSocket:
+      port: 9000
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  readinessProbe:
+    tcpSocket:
+      port: 9000
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  resources: {}
+  nodeSelector: 
+    app: erpnext
+  tolerations: []
+  affinity: {}
+  service:
+    type: ClusterIP
+    port: 9000
+  envVars: []
+  initContainers: []
+  sidecars: []
+persistence:
+  worker:
+    enabled: true
+    # existingClaim: ""
+    size: 8Gi
+    storageClass: "longhorn"
+  logs:
+    # Container based log search and analytics stack recommended
+    enabled: false
+    # existingClaim: ""
+    size: 8Gi
+    # storageClass: "efs-sc-v2"
+# Ingress
+ingress:
+  # ingressName: "dev-erpnext-"
+  className: "kv2-alpha"
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+  - host: erp.cluster.local
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: auth-server-tls
+  #    hosts:
+  #      - auth-server.local
+jobs:
+  volumePermissions:
+    enabled: false
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+  configure:
+    enabled: true
+    fixVolume: true
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+    envVars: []
+    command: []
+    args: []
+  createSite:
+    enabled: true
+    forceCreate: false
+    siteName: "erp.cluster.local"
+    adminPassword: "changeit"
+    installApps:
+    - "erpnext"
+    - "special_ops_frappe_utilities"
+    dbType: "mariadb"
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+  dropSite:
+    enabled: false
+    forced: false
+    siteName: "erp.cluster.local"
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+  backup:
+    enabled: false
+    siteName: "erp.cluster.local"
+    withFiles: true
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+  migrate:
+    enabled: true
+    siteName: "erp.cluster.local"
+    skipFailing: false
+    backoffLimit: 0
+    resources: {}
+    nodeSelector:
+      app: erpnext
+
+    tolerations: []
+    affinity: {}
+  custom:
+    enabled: false
+    jobName: ""
+    labels: {}
+    backoffLimit: 0
+    initContainers: []
+    containers: []
+    restartPolicy: Never
+    volumes: []
+    nodeSelector:
+      app: erpnext
+
+    affinity: {}
+    tolerations: []
+  uninstallApps:
+    # jobName: ""
+    enabled: false
+    siteName: "erp.cluster.local"
+    backoffLimit: 0
+    apps: []
+    forced: false
+    resources: {}
+    nodeSelector:
+      app: erpnext
+    tolerations: []
+    affinity: {}
+podDisruptionBudget:
+  enabled: false
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  annotations: {}
+  name: ""
+podSecurityContext:
+  supplementalGroups: [1000]
+securityContext:
+  capabilities:
+    add:
+    - CAP_CHOWN
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+redis-cache:
+  # https://github.com/bitnami/charts/tree/master/bitnami/redis
+  enabled: true
+  # host: ""
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinal: false
+  master:
+    containerPorts:
+      redis: 6379
+    persistence:
+      enabled: false
+redis-queue:
+  # https://github.com/bitnami/charts/tree/master/bitnami/redis
+  enabled: true
+  # host: ""
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinal: false
+  master:
+    containerPorts:
+      redis: 6379
+    persistence:
+      enabled: false
+mariadb:
+  # https://github.com/bitnami/charts/tree/master/bitnami/mariadb
+  enabled: true
+  auth:
+    rootPassword: "changeit"
+    username: "erpnext"
+    password: "changeit"
+    replicationPassword: "changeit"
+  primary:
+    service:
+      ports:
+        mysql: 3306
+    extraFlags: >-
+      --skip-character-set-client-handshake
+      --skip-innodb-read-only-compressed
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+postgresql:
+  # https://github.com/bitnami/charts/tree/master/bitnami/postgresql
+  enabled: false
+  # host: ""
+  auth:
+    username: "postgres"
+    postgresPassword: "changeit"
+  primary:
+    service:
+      ports:
+        postgresql: 5432
