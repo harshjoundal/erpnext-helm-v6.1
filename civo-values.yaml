@@ -323,7 +323,7 @@ jobs:
     args: []
   createSite:
     enabled: true
-    forceCreate: false
+    forceCreate: true
     siteName: "erp.cluster.local"
     adminPassword: "changeit"
     installApps:
