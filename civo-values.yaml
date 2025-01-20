@@ -360,7 +360,7 @@ jobs:
     tolerations: []
     affinity: {}
   migrate:
-    enabled: false
+    enabled: true
     siteName: "erp.cluster.local"
     skipFailing: false
     backoffLimit: 0
