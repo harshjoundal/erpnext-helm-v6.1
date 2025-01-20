@@ -386,7 +386,7 @@ jobs:
     tolerations: []
   uninstallApps:
     # jobName: ""
-    enabled: true
+    enabled: false
     siteName: "erp.cluster.local"
     backoffLimit: 0
     apps:
