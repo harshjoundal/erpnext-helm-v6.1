@@ -79,11 +79,11 @@ commonEnvVars: &commonEnvVars
     value: "Erp@1234"
 custom_apps:
   - special_ops_frappe_utilities
-  # - frappe_external_solutions
-  # - india_compliance
-  # - exotel_integration
-  # - helpdesk
-  # - pw_help_desk
+  - frappe_external_solutions
+  - india_compliance
+  - exotel_integration
+  - helpdesk
+  - pw_help_desk
 worker:
   gunicorn:
     replicaCount: 2
