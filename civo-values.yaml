@@ -11,6 +11,9 @@ dbName: "erpnext"
 elkKube:
   enabled: true
 
+nameOverride: "erpnext" # this will pe used as label eg.app.kubernetes.io/name: {{ include "erpnext.name" . }}-worker-l
+fullnameOverride: "frappe-bench-erpnext"  # this will be used as a prefix for the resource name 
+
 image:
   repository:  harshjoundal7/helpdesk
   tag: amd
@@ -401,8 +404,8 @@ jobs:
 podDisruptionBudget:
   enabled: false
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
